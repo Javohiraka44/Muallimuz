@@ -9,7 +9,7 @@ CORS(app)
 
 # 1. Gemini API Kalitini sozlash
 # O'z API kalitingizni shu yerga kiriting yoki muhit o'zgaruvchisiga (Environment Variable) joylang
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "curl "AQ.Ab8RN6Jv2Ba5yzd-mNOsw0xDSLedigmDEo56hCpVjnYUZYyMJw" \
   -H 'Content-Type: application/json' \
   -H 'X-goog-api-key: AQ.Ab8RN6Jv2Ba5yzd-mNOsw0xDSLedigmDEo56hCpVjnYUZYyMJw' \
   -X POST \
