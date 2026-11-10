@@ -62,4 +62,7 @@ def chat():
 
 if __name__ == '__main__':
     # Mahalliy serverni 5000-portda ishga tushirish
-    app.run(debug=True, port=5000)
+if __name__ == '__main__':
+    # Render muhitidagi portni avtomatik aniqlash (Render talabi)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
