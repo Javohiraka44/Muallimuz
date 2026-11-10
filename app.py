@@ -28,7 +28,7 @@ model = genai.GenerativeModel(
     system_instruction=SYSTEM_INSTRUCTION
 )
 
-@app.route('/gemini-chat',起 methods=['POST'])
+@app.route('/gemini-chat', methods=['POST'])
 def chat():
     try:
         data = request.json
