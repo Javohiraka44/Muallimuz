@@ -162,6 +162,142 @@
         const tg = window.Telegram.WebApp;
         tg.expand(); tg.ready();
 
-        // O'yinlarni menyuda almashtirish
+        // O'yinlarni menyuda almashtirish funksiyasi
         function switchGame(gameType) {
             document.querySelectorAll('.game-zone').forEach(z => z.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`game-${gameType}`).classList.add('active');
+            document.getElementById(`tab-${gameType}`).classList.add('active');
+            
+            clearInterval(mathInterval);
+            document.getElementById('math-start-screen').style.display = 'block';
+            document.getElementById('math-game-play').style.display = 'none';
+            document.getElementById('word-start-screen').style.display = 'block';
+            document.getElementById('word-game-play').style.display = 'none';
+            document.getElementById('memory-start-screen').style.display = 'block';
+            document.getElementById('memory-game-play').style.display = 'none';
+        }
+
+        // --- 1. MATEMATIKA O'YINI ---
+        let mathScore = 0, mathTimer = 60, mathInterval, mathCorrectAnswer = 0;
+        function startMathGame() {
+            mathScore = 0; mathTimer = 60;
+            document.getElementById('math-score').innerText = mathScore;
+            document.getElementById('math-timer').innerText = mathTimer;
+            document.getElementById('math-start-screen').style.display = 'none';
+            document.getElementById('math-game-play').style.display = 'block';
+            generateMathQuestion();
+            mathInterval = setInterval(() => {
+                mathTimer--;
+                document.getElementById('math-timer').innerText = mathTimer;
+                if (mathTimer <= 0) {
+                    clearInterval(mathInterval);
+                    alert(`Vaqt tugadi! To'plagan ballingiz: ${mathScore}`);
+                    switchGame('math');
+                }
+            }, 1000);
+        }
+        function generateMathQuestion() {
+            let n1 = Math.floor(Math.random() * 15) + 2, n2 = Math.floor(Math.random() * 15) + 2;
+            mathCorrectAnswer = n1 + n2;
+            document.getElementById('math-question').innerText = `${n1} + ${n2} = ?`;
+            let opts = [mathCorrectAnswer];
+            while(opts.length < 4){
+                let w = mathCorrectAnswer + (Math.floor(Math.random() * 8) - 4);
+                if(!opts.includes(w) && w >= 0) opts.push(w);
+            }
+            opts.sort(() => Math.random() - 0.5);
+            const container = document.getElementById('math-options-container');
+            container.innerHTML = '';
+            opts.forEach(o => {
+                const b = document.createElement('button'); b.className = 'math-btn';
+                b.innerText = o; b.onclick = () => {
+                    if(o === mathCorrectAnswer) { mathScore += 10; if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); }
+                    else { mathTimer = Math.max(0, mathTimer - 5); if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error'); }
+                    document.getElementById('math-score').innerText = mathScore; generateMathQuestion();
+                };
+                container.appendChild(b);
+            });
+        }
+
+        // --- 2. SO'Z TOPISH O'YINI ---
+        const wordBank = [
+            { original: "maktab", hint: "Bilim maskani, o'quv muassasasi" },
+            { original: "muallim", hint: "Sizga dars beruvchi ustoz" },
+            { original: "kitob", hint: "Bilim manbai, varaqlari bor boylik" },
+            { original: "kundalik", hint: "Baholar yoziladigan daftar" },
+            { original: "sinf", hint: "Partalar joylashgan xona" }
+        ];
+        let currentWordObj, wordScore = 0;
+        function startWordGame() {
+            wordScore = 0; document.getElementById('word-score').innerText = wordScore;
+            document.getElementById('word-start-screen').style.display = 'none';
+            document.getElementById('word-game-play').style.display = 'block';
+            nextWord();
+        }
+        function nextWord() {
+            document.getElementById('word-user-input').value = "";
+            currentWordObj = wordBank[Math.floor(Math.random() * wordBank.length)];
+            let arr = currentWordObj.original.split('').sort(() => Math.random() - 0.5);
+            document.getElementById('scrambled-display').innerText = arr.join('');
+            document.getElementById('word-hint-text').innerText = `Yordam: ${currentWordObj.hint}`;
+        }
+        function checkWordAnswer() {
+            let ans = document.getElementById('word-user-input').value.trim().toLowerCase();
+            if(ans === currentWordObj.original) {
+                wordScore += 15; document.getElementById('word-score').innerText = wordScore;
+                if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                alert("To'g'ri topdingiz! 🎉"); nextWord();
+            } else {
+                if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+                alert("Noto'g'ri, qaytadan urinib ko'ring.");
+            }
+        }
+
+        // --- 3. XOTIRA O'YINI ---
+        const svgIcons = [
+            '<svg viewBox="0 0 448 512"><path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32V96c0-17.7 14.3-32 32-32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/></svg>',
+            '<svg viewBox="0 0 512 512"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-141.2 60.3L30.4 382.1c-9.4 9.4-14.7 22.3-14.7 35.6V496c0 8.8 7.2 16 16 16H114.3c13.3 0 26.2-5.3 35.6-14.7L428.3 182.2 330.4 82z"/></svg>',
+            '<svg viewBox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 64.7-145.5 145.5 0 26.5 6.4 51.3 19.3 73.1L30 423.4c-9.4 9.4-9.4 24.6 0 33.9l28.3 28.3c9.4 9.4 24.6 9.4 33.9 0l133-133c19.3 9.4 41.5 14.8 64.8 14.8 80.8 0 145.5-64.7 145.5-145.5S368.8 32 288 32z"/></svg>',
+            '<svg viewBox="0 0 384 512"><path d="M0 256L244.7 32 185.6 224H384L139.3 480 198.4 288H0z"/></svg>'
+        ];
+        let memoryIcons = [...svgIcons, ...svgIcons];
+        let moves = 0, flippedCards = [];
+        
+        function startMemoryGame() {
+            moves = 0; document.getElementById('memory-moves').innerText = moves;
+            document.getElementById('memory-start-screen').style.display = 'none';
+            document.getElementById('memory-game-play').style.display = 'block';
+            
+            memoryIcons.sort(() => Math.random() - 0.5);
+            const container = document.getElementById('memory-grid-container');
+            container.innerHTML = '';
+            
+            memoryIcons.forEach((svg, idx) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card'; card.innerHTML = svg;
+                card.dataset.id = idx; card.onclick = () => flipCard(card);
+                container.appendChild(card);
+            });
+        }
+        function flipCard(card) {
+            if(card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length >= 2) return;
+            card.classList.add('flipped'); flippedCards.push(card);
+            if(flippedCards.length === 2) {
+                moves++; document.getElementById('memory-moves').innerText = moves;
+                if(flippedCards[0].innerHTML === flippedCards[1].innerHTML) {
+                    flippedCards.forEach(c => c.classList.add('matched')); flippedCards = [];
+                    if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+                    if(document.querySelectorAll('.memory-card.matched').length === memoryIcons.length) {
+                        setTimeout(() => alert(`Tabriklaymiz! O'yinni ${moves} ta harakatda tugatdingiz! 🎉`), 300);
+                    }
+                } else {
+                    if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+                    setTimeout(() => { flippedCards.forEach(c => c.classList.remove('flipped')); flippedCards = []; }, 800);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
