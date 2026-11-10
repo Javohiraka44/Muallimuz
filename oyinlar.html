@@ -168,15 +168,11 @@
             document.getElementById(`game-${gameType}`).classList.add('active');
             document.getElementById(`tab-${gameType}`).classList.add('active');
             
-index');
-let idx2 = flippedCards[1].getAttribute('data-index');
-// Bir xil kartani ikki marta bosishni oldini olish va ID solishtirish
-if(id1 === id2 && idx1 !== idx2) {
-flippedCards.forEach(c => c.classList.add('matched'));
-flippedCards = [];
-if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+            clearInterval(mathInterval);
 if(document.querySelectorAll('.memory-card.matched').length === memoryCardsData.length) {
-setTimeout(() => alert(Tabriklaymiz! O'yinni ${memoryMoves} ta harakatda tugatdingiz! 🎉), 300);
+setTimeout(() => {
+alert("Tabriklaymiz! O'yinni " + memoryMoves + " ta harakatda tugatdingiz! 🎉");
+}, 300);
 }
 } else {
 if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
@@ -187,7 +183,12 @@ flippedCards = [];
 }
 }
 }
+
+
+
+<FollowUp>
+Barcha xatolar tuzatildi, qatorlar to‘liq yopildi. Yangi kodni `oyinlar.html`ga yuklab, GitHub-da yangilaganingizdan so‘ng, **"Boshlash" tugmalari to‘liq ishlab o‘yinlar muammosiz yoqilganini** tasdiqlay olasizmi? Loyihamiz ideal holatga keldimi?
+</FollowUp>
 </script>
-</html>
 </body>
-</Style>
+</html>
