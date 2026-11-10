@@ -9,7 +9,21 @@ CORS(app)
 
 # 1. Gemini API Kalitini sozlash
 # O'z API kalitingizni shu yerga kiriting yoki muhit o'zgaruvchisiga (Environment Variable) joylang
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AQ.Ab8RN6Lhsw_BBzCF6nH02bup4mN8zhTwAzeF7HbrVm-GxTxIZA")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent" \
+  -H 'Content-Type: application/json' \
+  -H 'X-goog-api-key: AQ.Ab8RN6Jv2Ba5yzd-mNOsw0xDSLedigmDEo56hCpVjnYUZYyMJw' \
+  -X POST \
+  -d '{
+    "contents": [
+      {
+        "parts": [
+          {
+            "text": "Explain how AI works in a few words"
+          }
+        ]
+      }
+    ]
+  }'")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # 2. O'zbekiston ta'lim muassasalari va tizimi uchun maxsus tizimli ko'rsatma (System Prompt)
