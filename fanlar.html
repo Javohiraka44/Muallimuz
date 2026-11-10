@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fanlar bo'limi - MuallimUz</title>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Ikonkalar uchun FontAwesome -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+
+    <!-- Yuqori qism va Orqaga qaytish -->
+    <header class="twa-header subjects-header">
+        <div class="back-nav">
+            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <div>
+                <h2>Fanlar xazinasi</h2>
+                <p>Maktab fanlari va ochiq resurslar</p>
+            </div>
+        </div>
+        <div class="section-icon"><i class="fas fa-book-open"></i></div>
+    </header>
+
+    <!-- Fanlarni saralash / Qidirish -->
+    <div class="twa-search-container">
+        <div class="twa-search-box">
+            <input type="text" id="subject-search" oninput="searchSubjects()" placeholder="Fanni qidiring (masalan: Matematika)...">
+            <button><i class="fas fa-magnifying-glass"></i></button>
+        </div>
+    </div>
+
+    <!-- Fanlar ro'yxati (Kategoriyalar bo'yicha) -->
+    <main class="subjects-container">
+        
+        <!-- Aniq fanlar bloki -->
+        <div class="subject-group">
+            <h3 class="group-title"><i class="fas fa-calculator"></i> Aniq fanlar</h3>
+            <div class="twa-menu-grid subject-subgrid">
+                <a href="#matematika" class="grid-item subject-item">
+                    <div class="icon-wrapper math-bg"><i class="fas fa-plus-minus"></i></div>
+                    <span>Matematika</span>
+                </a>
+                <a href="#informatika" class="grid-item subject-item">
+                    <div class="icon-wrapper info-bg"><i class="fas fa-laptop-code"></i></div>
+                    <span>Informatika</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Tabiiy fanlar bloki -->
+        <div class="subject-group">
+            <h3 class="group-title"><i class="fas fa-flask"></i> Tabiiy fanlar</h3>
+            <div class="twa-menu-grid subject-subgrid">
+                <a href="#fizika" class="grid-item subject-item">
+                    <div class="icon-wrapper physics-bg"><i class="fas fa-atom"></i></div>
+                    <span>Fizika</span>
+                </a>
+                <a href="#kimyo" class="grid-item subject-item">
+                    <div class="icon-wrapper chemistry-bg"><i class="fas fa-vial"></i></div>
+                    <span>Kimyo</span>
+                </a>
+                <a href="#biologiya" class="grid-item subject-item">
+                    <div class="icon-wrapper biology-bg"><i class="fas fa-dna"></i></div>
+                    <span>Biologiya</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Gumanitar va tillar bloki -->
+        <div class="subject-group">
+            <h3 class="group-title"><i class="fas fa-language"></i> Tillar va Tarix</h3>
+            <div class="twa-menu-grid subject-subgrid">
+                <a href="#ona-tili" class="grid-item subject-item">
+                    <div class="icon-wrapper lang-bg"><i class="fas fa-pen-nib"></i></div>
+                    <span>O'zbek tili</span>
+                </a>
+                <a href="#ingliz-tili" class="grid-item subject-item">
+                    <div class="icon-wrapper english-bg"><i class="fas fa-font"></i></div>
+                    <span>Ingliz tili</span>
+                </a>
+                <a href="#tarix" class="grid-item subject-item">
+                    <div class="icon-wrapper history-bg"><i class="fas fa-landmark"></i></div>
+                    <span>Tarix</span>
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Telegram interfeysidagi "Orqaga" tugmasi
+        if (tg.BackButton) {
+            tg.BackButton.show();
+            tg.BackButton.onClick(function() {
+                window.location.href = "index.html";
+            });
+        }
+
+        // Oddiy va tezkor qidiruv funksiyasi
+        function searchSubjects() {
+            const query = document.getElementById('subject-search').value.toLowerCase();
+            const items = document.querySelectorAll('.subject-item');
+            
+            items.forEach(item => {
+                const text = item.querySelector('span').innerText.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

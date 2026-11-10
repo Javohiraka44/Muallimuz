@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>O'quvchilar bo'limi - MuallimUz</title>
+    <script src="https://telegram.org"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+
+    <!-- Yuqori qism va Orqaga qaytish -->
+    <header class="twa-header student-header">
+        <div class="back-nav">
+            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <div>
+                <h2>Bilimdonlar maskani</h2>
+                <p>Interaktiv ta'lim va foydali havolalar</p>
+            </div>
+        </div>
+        <div class="section-icon"><i class="fas fa-graduation-cap"></i></div>
+    </header>
+
+    <!-- O'quvchilar uchun xavfsiz va ruxsat etilgan yo'nalishlar -->
+    <main class="twa-menu-grid student-grid">
+        
+        <!-- 1. Rasmiy eMaktab tizimiga tezkor o'tish (Xavfsiz havola) -->
+        <div class="grid-item card-expanded">
+            <div class="card-badge bg-blue">Rasmiy Havola</div>
+            <div class="icon-wrapper teacher-bg"><i class="fas fa-calendar-check"></i></div>
+            <h3>eMaktab.uz tizimi</h3>
+            <p>Ilovadan chiqmasdan rasmiy eMaktab profilishingizga kiring, dars jadvali va uy vazifalarini ko'ring.</p>
+            <!-- eMaktabning rasmiy ochiq login sahifasiga yo'naltiriladi -->
+            <a href="https://emaktab.uz" target="_blank" class="card-btn">Tizimga o'tish <i class="fas fa-external-link-alt"></i></a>
+        </div>
+
+        <!-- 2. Prezident maktablari imtihonlari namunalari (Ochiq manba) -->
+        <div class="grid-item card-expanded">
+            <div class="card-badge bg-gold">Tayyorgarlik</div>
+            <div class="icon-wrapper subject-bg"><i class="fas fa-star"></i></div>
+            <h3>Prezident maktabi test namunalari</h3>
+            <p>Imtihonlarda tushadigan tanqidiy fikrlash, mantiq va ingliz tili bo'yicha rasmiy ochiq savollar namunalari.</p>
+            <a href="#prezident-tests" class="card-btn">Namunalarni ko'rish <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+        <!-- 3. Interaktiv Ta'limiy O'yinlar (Biz o'zimiz yaratadigan qism) -->
+        <div class="grid-item card-expanded game-card">
+            <div class="card-badge bg-green">Interaktiv</div>
+            <div class="icon-wrapper student-bg"><i class="fas fa-gamepad"></i></div>
+            <h3>Zukko O'yinlar</h3>
+            <p>Matematik poyga, so'z boyligini oshiruvchi krossvordlar va mantiqiy viktorinalar orqali bilib o'rganing.</p>
+            <a href="oyinlar.html" class="card-btn btn-green">O'yinni boshlash <i class="fas fa-play"></i></a>
+        </div>
+
+        <!-- 4. Elektron darsliklar (Ochiq PDF darsliklar) -->
+        <div class="grid-item card-expanded">
+            <div class="icon-wrapper class-bg"><i class="fas fa-headphones"></i></div>
+            <h3>Raqamli kutubxona</h3>
+            <p>Maktab darsliklarining ochiq PDF variantlari hamda adabiyot darslaridagi asarlarning audio talqinlari.</p>
+            <a href="#library" class="card-btn">Mutolaa qilish <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+    </main>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        if (tg.BackButton) {
+            tg.BackButton.show();
+            tg.BackButton.onClick(function() {
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+</body>
+</html>

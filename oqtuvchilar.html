@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>O'qituvchilar bo'limi - MuallimUz</title>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- Ikonkalar uchun FontAwesome -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+
+    <!-- Yuqori qism va Orqaga qaytish -->
+    <header class="twa-header section-header">
+        <div class="back-nav">
+            <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <div>
+                <h2>Ustozlar xonasi</h2>
+                <p>Metodik yordam va zamonaviy vositalar</p>
+            </div>
+        </div>
+        <div class="section-icon"><i class="fas fa-chalkboard-user"></i></div>
+    </header>
+
+    <!-- Dolzarb Bo'limlar Grid Tizimi -->
+    <main class="twa-menu-grid teacher-grid">
+        
+        <!-- 1. Attestatsiya va Sertifikatlar -->
+        <div class="grid-item card-expanded">
+            <div class="card-badge bg-red">Dolzarb</div>
+            <div class="icon-wrapper teacher-bg"><i class="fas fa-id-card-clip"></i></div>
+            <h3>Attestatsiya 2026</h3>
+            <p>Vazirlik milliy sertifikat testlari, dars tahlili mezonlari va malaka toifasi hujjatlari.</p>
+            <a href="#attestatsiya" class="card-btn">Kirish <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+        <!-- 2. Tayyor dars ishlanmalari (Konspektlar) -->
+        <div class="grid-item card-expanded">
+            <div class="icon-wrapper subject-bg"><i class="fas fa-folder-open"></i></div>
+            <h3>Dars ishlanmalari</h3>
+            <p>1-11 sinflar uchun yangi darsliklar asosida tayyorlangan kunlik va taqvim reja (KTP) materiallari.</p>
+            <a href="#konspektlar" class="card-btn">Yuklab olish <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+        <!-- 3. Sun'iy Intellekt yordamida Konspekt Yaratuvchi (AI Generator) -->
+        <div class="grid-item card-expanded ai-tool-card">
+            <div class="card-badge bg-purple">AI Vosita</div>
+            <div class="icon-wrapper class-bg"><i class="fas fa-wand-magic-sparkles"></i></div>
+            <h3>AI Konspekt Generator</h3>
+            <p>Mavzuni kiriting, Gemini AI sizga sekundlar ichida interaktiv dars ssenariysini tuzib beradi.</p>
+            <a href="#ai-generator" class="card-btn btn-purple">Ochish <i class="fas fa-wand-magic"></i></a>
+        </div>
+
+        <!-- 4. Pedagogik Mahorat va Webinarlar -->
+        <div class="grid-item card-expanded">
+            <div class="icon-wrapper student-bg"><i class="fas fa-display"></i></div>
+            <h3>Metodik xonalar</h3>
+            <p>Ilg'or o'qituvchilar tajribalari, zamonaviy ped-texnologiyalar va video darslar to'plami.</p>
+            <a href="#metodika" class="card-btn">Ko'rish <i class="fas fa-chevron-right"></i></a>
+        </div>
+
+    </main>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // Telegram ilovasi ichidagi yuqori "Orqaga" (Back) tugmasini yoqish
+        if (tg.BackButton) {
+            tg.BackButton.show();
+            tg.BackButton.onClick(function() {
+                window.location.href = "index.html";
+            });
+        }
+    </script>
+</body>
+</html>
