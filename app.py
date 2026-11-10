@@ -9,7 +9,7 @@ CORS(app)
 
 # 1. Gemini API Kalitini sozlash
 # O'z API kalitingizni shu yerga kiriting yoki muhit o'zgaruvchisiga (Environment Variable) joylang
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_ACTUAL_GEMINI_API_KEY_HERE")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AQ.Ab8RN6Lhsw_BBzCF6nH02bup4mN8zhTwAzeF7HbrVm-GxTxIZA")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # 2. O'zbekiston ta'lim muassasalari va tizimi uchun maxsus tizimli ko'rsatma (System Prompt)
