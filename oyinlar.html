@@ -4,64 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Zukko O'yinlar - MuallimUz</title>
+    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org"></script>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
-        /* O'yinlar uchun maxsus qo'shimcha ichki dizaynlar */
+        /* O'yinlar uchun maxsus qo'shimcha mukammal dizaynlar */
         .games-header { background: linear-gradient(135deg, #11998e, #38ef7d) !important; }
-        .game-zone { background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; margin-bottom: 15px; min-height: 320px; display: none; }
-        .game-zone.active { display: block; }
-        .game-nav-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-        .tab-btn { flex: 1; padding: 10px; border: 1px solid #ddd; background: #fff; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .tab-btn.active { background: #11998e; color: #fff; border-color: #11998e; }
         
-        /* 1. Matematik o'yin dizayni */
+        .game-zone { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            text-align: center; 
+            margin-bottom: 15px; 
+            min-height: 320px; 
+            display: none; 
+        }
+        .game-zone.active { display: block; }
+        
+        /* Navigatsiya tugmalari */
+        .game-nav-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tab-btn { 
+            flex: 1; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            background: #fff; 
+            border-radius: 8px; 
+            font-size: 11px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 6px; 
+            color: #333;
+        }
+        .tab-btn.active { background: #11998e; color: #fff; border-color: #11998e; }
+        .tab-btn svg { width: 18px; height: 18px; fill: currentColor; }
+        
+        /* Oflayn xavfsiz SVG ikonkalar uchun umumiy uslub */
+        .icon-wrapper svg { width: 22px; height: 22px; fill: currentColor; }
+        .start-screen svg { width: 50px; height: 50px; fill: currentColor; margin-bottom: 10px; }
+        .btn-back svg { width: 16px; height: 16px; fill: #ffffff; display: block; }
+
+        /* 1. Matematika o'yini */
         .math-display { font-size: 32px; font-weight: bold; color: #2c3e50; margin: 15px 0; }
         .timer-bar { font-size: 14px; color: #e74c3c; font-weight: bold; }
         .score-board { font-size: 14px; color: #27ae60; font-weight: bold; }
         .math-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .math-btn { padding: 12px; font-size: 16px; font-weight: bold; background: #f8f9fa; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; }
-        .start-screen button { padding: 12px 30px; font-size: 16px; background: #11998e; color: white; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .math-btn { padding: 12px; font-size: 16px; font-weight: bold; background: #f8f9fa; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer; color: #333; }
+        .math-btn:active { background: #e2e8f0; }
+        .start-screen button { padding: 12px 30px; font-size: 15px; background: #11998e; color: white; border: none; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* 2. So'z topish o'yini dizayni */
-        .scrambled-word { font-size: 28px; font-weight: bold; color: #8e44ad; letter-spacing: 5px; margin: 15px 0; text-transform: uppercase; }
-        .word-input { width: 80%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; outline: none; margin-bottom: 10px; }
+        /* 2. So'z topish o'yini */
+        .scrambled-word { font-size: 26px; font-weight: bold; color: #8e44ad; letter-spacing: 4px; margin: 15px 0; text-transform: uppercase; }
+        .word-input { width: 90%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; outline: none; margin-bottom: 12px; }
         .word-input:focus { border-color: #8e44ad; }
         .word-hint { font-size: 13px; color: #7f8c8d; font-style: italic; margin-bottom: 15px; }
 
-        /* 3. Xotira o'yini dizayni */
+        /* 3. Xotira o'yini (Memory Game) */
         .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 300px; margin: 15px auto; }
-        .memory-card { height: 65px; background: #2c3e50; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; color: transparent; transition: transform 0.2s; }
-        .memory-card.flipped { background: #fff; border: 2px solid #2c3e50; color: #2c3e50; transform: rotateY(180deg); }
-        .memory-card.matched { background: #2ecc71; border-color: #2ecc71; color: white; cursor: default; }
+        .memory-card { height: 65px; background: #2c3e50; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .memory-card svg { width: 24px; height: 24px; fill: #ffffff; display: none; }
+        .memory-card.flipped { background: #fff; border: 2px solid #2c3e50; transform: rotateY(180deg); }
+        .memory-card.flipped svg { display: block; fill: #2c3e50; }
+        .memory-card.matched { background: #2ecc71; border-color: #2ecc71; cursor: default; }
+        .memory-card.matched svg { display: block; fill: #ffffff; }
     </style>
 </head>
 <body>
 
-    <!-- Yuqori qism va Orqaga qaytish -->
+    <!-- Yuqori qism va Orqaga qaytish (Oflayn Xavfsiz) -->
     <header class="twa-header games-header">
         <div class="back-nav">
-            <a href="oquvchilar.html" class="btn-back"><i class="fas fa-arrow-left"></i></a>
+            <a href="oquvchilar.html" class="btn-back">
+                <svg viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H109.2l105.4-105.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l160 160z"/></svg>
+            </a>
             <div>
                 <h2>Zukko O'yinlar</h2>
                 <p>O'yna va bilimingni oshir!</p>
             </div>
         </div>
-        <div class="section-icon"><i class="fas fa-gamepad"></i></div>
     </header>
 
-    <!-- O'yinlar menyusi -->
+    <!-- O'yinlar menyusi (SVG Ikonkalar bilan) -->
     <div class="game-nav-tabs">
-        <button class="tab-btn active" id="tab-math" onclick="switchGame('math')"><i class="fas fa-calculator"></i> Matematika</button>
-        <button class="tab-btn" id="tab-word" onclick="switchGame('word')"><i class="fas fa-font"></i> So'z top</button>
-        <button class="tab-btn" id="tab-memory" onclick="switchGame('memory')"><i class="fas fa-brain"></i> Xotira</button>
+        <button class="tab-btn active" id="tab-math" onclick="switchGame('math')">
+            <svg viewBox="0 0 448 512"><path d="M432 256c0 17.7-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l368 0c17.7 0 32 14.3 32 32zM176 64c0 17.7-14.3 32-32 32L32 96C14.3 96 0 81.7 0 64s14.3-32 32-32l112 0c17.7 0 32 14.3 32 32zm0 384c0 17.7-14.3 32-32 32L32 480c-17.7 0-32-14.3-32-32s14.3-32 32-32l112 0c17.7 0 32 14.3 32 32z"/></svg>
+            Matematika
+        </button>
+        <button class="tab-btn" id="tab-word" onclick="switchGame('word')">
+            <svg viewBox="0 0 448 512"><path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H96c-17.7 0-32-14.3-32-32V96c0-17.7 14.3-32 32-32H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/></svg>
+            So'z top
+        </button>
+        <button class="tab-btn" id="tab-memory" onclick="switchGame('memory')">
+            <svg viewBox="0 0 512 512"><path d="M416 48v416c0 26.5-21.5 48-48 48H144c-26.5 0-48-21.5-48-48V48c0-26.5 21.5-48 48-48h224c26.5 0 48 21.5 48 48zm-96 64c0-17.7-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32h64c17.7 0 32-14.3 32-32v-64z"/></svg>
+            Xotira
+        </button>
     </div>
 
     <!-- 1-O'YIN: TEZKOR MATEMATIKA -->
     <div id="game-math" class="game-zone active">
         <div class="start-screen" id="math-start-screen">
-            <i class="fas fa-bolt" style="font-size: 44px; color: #f1c40f;"></i>
+            <svg style="fill: #f1c40f;" viewBox="0 0 384 512"><path d="M0 256L244.7 32 185.6 224H384L139.3 480 198.4 288H0z"/></svg>
             <h3>Tezkor Matematika</h3>
             <p style="font-size: 13px; color: #666; margin: 10px 0;">60 soniya ichida imkon qadar ko'p misollarni to'g'ri yeching!</p>
             <button onclick="startMathGame()">Boshlash</button>
@@ -69,17 +115,17 @@
         <div class="game-play" id="math-game-play" style="display: none;">
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 8px;">
                 <div class="score-board">Ball: <span id="math-score">0</span></div>
-                <div class="timer-bar"><i class="fas fa-clock"></i> Vaqt: <span id="math-timer">60</span>s</div>
+                <div class="timer-bar">Vaqt: <span id="math-timer">60</span>s</div>
             </div>
             <div class="math-display" id="math-question">5 + 7 = ?</div>
             <div class="math-options" id="math-options-container"></div>
         </div>
     </div>
 
-    <!-- 2-O'YIN: ARALASHGAN SO'ZLAR (SO'Z TOP) -->
+    <!-- 2-O'YIN: ARALASHGAN SO'ZLAR -->
     <div id="game-word" class="game-zone">
         <div class="start-screen" id="word-start-screen">
-            <i class="fas fa-spell-check" style="font-size: 44px; color: #9b59b6;"></i>
+            <svg style="fill: #9b59b6;" viewBox="0 0 448 512"><path d="M443.3 267.3c6.2-6.2 6.2-16.4 0-22.6l-176-176c-6.2-6.2-16.4-6.2-22.6 0l-176 176c-6.2 6.2-6.2 16.4 0 22.6l176 176c6.2 6.2 16.4 6.2 22.6 0l176-176z"/></svg>
             <h3>Zukko Lug'at</h3>
             <p style="font-size: 13px; color: #666; margin: 10px 0;">Harflari aralashib ketgan ta'limiy so'zlarni asliga qaytaring!</p>
             <button onclick="startWordGame()">Boshlash</button>
@@ -92,14 +138,14 @@
             <div class="word-hint" id="word-hint-text">Yordam: Bilim olish jarayoni</div>
             <input type="text" id="word-user-input" class="word-input" placeholder="To'g'ri so'zni yozing...">
             <br>
-            <button onclick="checkWordAnswer()" style="padding: 8px 25px; background: #8e44ad; color: white; border: none; border-radius: 8px; font-weight: bold;">Tekshirish</button>
+            <button onclick="checkWordAnswer()" style="padding: 10px 30px; background: #8e44ad; color: white; border: none; border-radius: 20px; font-weight: bold; cursor: pointer;">Tekshirish</button>
         </div>
     </div>
 
     <!-- 3-O'YIN: XOTIRA MASHQI -->
     <div id="game-memory" class="game-zone">
         <div class="start-screen" id="memory-start-screen">
-            <i class="fas fa-eye" style="font-size: 44px; color: #e67e22;"></i>
+            <svg style="fill: #e67e22;" viewBox="0 0 576 512"><path d="M288 32c-80.8 0-145.5 64.7-145.5 145.5 0 26.5 6.4 51.3 19.3 73.1L30 423.4c-9.4 9.4-9.4 24.6 0 33.9l28.3 28.3c9.4 9.4 24.6 9.4 33.9 0l133-133c19.3 9.4 41.5 14.8 64.8 14.8 80.8 0 145.5-64.7 145.5-145.5S368.8 32 288 32z"/></svg>
             <h3>Miya Charxi</h3>
             <p style="font-size: 13px; color: #666; margin: 10px 0;">Yashiringan shakllar orasidan bir xil juftliklarni toping!</p>
             <button onclick="startMemoryGame()">Boshlash</button>
@@ -116,69 +162,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand(); tg.ready();
 
-        if (tg.BackButton) {
-            tg.BackButton.show();
-            tg.BackButton.onClick(() => window.location.href = "oquvchilar.html");
-        }
-
-        // Sahifada o'yinlarni almashtirish
+        // O'yinlarni menyuda almashtirish
         function switchGame(gameType) {
             document.querySelectorAll('.game-zone').forEach(z => z.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-            
-            document.getElementById(`game-${gameType}`).classList.add('active');
-            document.getElementById(`tab-${gameType}`).classList.add('active');
-            
-            // Ishlab turgan taymerlarni to'xtatish
-            clearInterval(mathInterval);
-            document.getElementById('math-start-screen').style.display = 'block';
-            document.getElementById('math-game-play').style.display = 'none';
-        }
-
-        // --- 1. MATEMATIKA O'YINI ---
-        let mathScore = 0, mathTimer = 60, mathInterval, correctAnswer = 0;
-        function startMathGame() {
-            mathScore = 0; mathTimer = 60;
-            document.getElementById('math-score').innerText = mathScore;
-            document.getElementById('math-timer').innerText = mathTimer;
-            document.getElementById('math-start-screen').style.display = 'none';
-            document.getElementById('math-game-play').style.display = 'block';
-            generateQuestion();
-            mathInterval = setInterval(() => {
-                mathTimer--;
-                document.getElementById('math-timer').innerText = mathTimer;
-                if (mathTimer <= 0) {
-                    clearInterval(mathInterval);
-                    alert(`Vaqt tugadi! Ballingiz: ${mathScore}`);
-                    switchGame('math');
-                }
-            }, 1000);
-        }
-        function generateQuestion() {
-            let n1 = Math.floor(Math.random() * 15) + 1, n2 = Math.floor(Math.random() * 15) + 1;
-            correctAnswer = n1 + n2;
-            document.getElementById('math-question').innerText = `${n1} + ${n2} = ?`;
-            let opts = [correctAnswer];
-            while(opts.length < 4){
-                let w = correctAnswer + (Math.floor(Math.random() * 8) - 4);
-                if(!opts.includes(w) && w >= 0) opts.push(w);
-            }
-            opts.sort(() => Math.random() - 0.5);
-            const container = document.getElementById('math-options-container');
-            container.innerHTML = '';
-            opts.forEach(o => {
-card.classList.add('flipped'); flippedCards.push(card);
-if(flippedCards.length === 2) {
-moves++; document.getElementById('memory-moves').innerText = moves;
-if(flippedCards[0].innerHTML === flippedCards[1].innerHTML) {
-flippedCards.forEach(c => c.classList.add('matched')); flippedCards = [];
-if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-if(document.querySelectorAll('.memory-card.matched').length === icons.length) {
-setTimeout(() => alert(Tabriklaymiz! O'yinni ${moves} ta harakatda tugatdingiz!), 300);
-}
-} else {
-if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
-setTimeout(() => { flippedCards.forEach(c => c.classList.remove('flipped')); flippedCards = []; }, 800);
-}
-}
-}
